@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AviationWeather Mailing</title> 
+    <style>
+      body { padding: 0px; margin: 0px; }
+      .jb-box { width: 100%; height: 500px; overflow: hidden;margin: 0px auto; position: relative; }
+      video { width: 100%; }
+      .jb-text { position: absolute; top: 50%; width: 100%; }
+      .jb-text p { margin-top: -24px; text-align: center; font-size: 48px; color: #ffffff; }
+    </style>
+</head>
+<body>
+
+	<video id="videoPlay" width="300" height="200" controls autoplay muted>
+		<source type="video/mp4" th:src="@{plane.mp4}" />
+	</video>
+<!--  
+<h2>인천공항 기상 알림 서비스</h2>
+
+<form class="inputContainer" action="/departureData" method="post" enctype="multipart/form-data">
+   <div class="inputContainer"> 
+     <input
+       class="inputEmail"
+       type="text"
+       name="email"
+       id="email"
+       placeholder="test@email.com"
+     />
+     <input
+       class="inputDate"
+       type="date"
+       name="departureDate"
+       id="departureDate"
+     />
+     <button class="submit">확인</button>
+   </div>
+</form>
+
+<br>
+<h3>오늘 기상 현황</h3>
+
+<span>line0</span><br>
+<span th:text="|${resMap0.airport} 기상예보|"></span><br>
+<span th:text="|최초예보 : ${resMap0.createTime}|"></span><br>
+<span th:text="|예보 유효시간 : ${resMap0.availableDay}|"></span><br>
+<span th:text="|방위각 : ${resMap0.azimuth}|"></span><br>
+<span th:text="|풍속 : ${resMap0.Knots} Knots |"></span><br>
+<span>Sight: </span><span th:text="${resMap0.sight}"></span><br>
+<span th:text="|CAVOK : ${resMap0.CAVOK}|"></span><br>
+<span th:text="|NSC : ${resMap0.NSC}|"></span><br>
+<span th:text="|FEW : ${resMap0.FEW}|"></span><br>
+<span th:text="|SCT : ${resMap0.SCT}|"></span><br>
+<span th:text="|약한비: ${resMap0.littleRA}|"></span><br>
+<span th:text="|비: ${resMap0.RA}|"></span><br>
+
+<br>
+<span>line1</span><br>
+<span th:text="|최저온도 : ${resMap1.minimumTemper}|"></span><br>
+<span th:text="|최고온도 : ${resMap1.highestTemper}|"></span><br>
+<br>
+
+ 
+<span>line2</span><br>
+<span th:text="|forecastDay : ${resMap2.forecastDay}|"></span><br>
+<span th:text="|방위각 : ${resMap2.azimuth}|"></span><br>
+<span th:text="|풍속 : ${resMap2.Knots} Knots |"></span><br>
+<span>Sight: </span><span th:text="${resMap2.sight}"></span><br>
+<span th:text="|CAVOK : ${resMap2.CAVOK}|"></span><br>
+<span th:text="|NSC : ${resMap2.NSC}|"></span><br>
+<span th:text="|FEW : ${resMap2.FEW}|"></span><br>
+<span th:text="|SCT : ${resMap2.SCT}|"></span><br>
+<span th:text="|약한비: ${resMap2.littleRA}|"></span><br>
+<span th:text="|비: ${resMap2.RA}|"></span><br>
+<br>
+
+<span>line3</span><br>
+<span th:text="|forecastDay : ${resMap3.forecastDay}|"></span><br>
+<span th:text="|방위각 : ${resMap3.azimuth}|"></span><br>
+<span th:text="|풍속 : ${resMap3.Knots} Knots |"></span><br>
+<span>Sight: </span><span th:text="${resMap3.sight}"></span><br>
+<span th:text="|CAVOK : ${resMap3.CAVOK}|"></span><br>
+<span th:text="|NSC : ${resMap3.NSC}|"></span><br>
+<span th:text="|FEW : ${resMap3.FEW}|"></span><br>
+<span th:text="|SCT : ${resMap3.SCT}|"></span><br>
+<span th:text="|약한비: ${resMap3.littleRA}|"></span><br>
+<span th:text="|비: ${resMap3.RA}|"></span><br>
+<br>
+
+<span>line4</span><br>
+<span th:text="|forecastDay : ${resMap4.forecastDay}|"></span><br>
+<span th:text="|방위각 : ${resMap4.azimuth}|"></span><br>
+<span th:text="|풍속 : ${resMap4.Knots} Knots |"></span><br>
+<span>Sight: </span><span th:text="${resMap4.sight}"></span><br>
+<span th:text="|CAVOK : ${resMap4.CAVOK}|"></span><br>
+<span th:text="|NSC : ${resMap4.NSC}|"></span><br>
+<span th:text="|FEW : ${resMap4.FEW}|"></span><br>
+<span th:text="|SCT : ${resMap4.SCT}|"></span><br>
+<span th:text="|약한비: ${resMap4.littleRA}|"></span><br>
+<span th:text="|비: ${resMap4.RA}|"></span><br>
+<br>
+-->
+</body>
+</html>

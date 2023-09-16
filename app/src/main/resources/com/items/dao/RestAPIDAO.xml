@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+  namespace => 인터페이스의 패키지 및 이름과 일치해야 한다.
+ -->
+<mapper namespace="com.items.dao.RestAPIDao">
+
+  <resultMap type="AirInfo" id="AirInfoMap">
+    <result column="ICAO_CODE" property="ICAOCode"/>
+    <result column="AIRPORT_NAME" property="AirPortName"/>
+    <result column="WD" property="WD"/>
+    <result column="WS" property="WS"/>
+    <result column="TA" property="TA"/>
+    <result column="QNH" property="QNH"/>
+  </resultMap>
+
+  <!-- AIR INFO INSERT -->
+  <!-- on절에 들어간 컬럼은 update에 들어갈 수 없다. -->
+  <insert id="insertAirInfo" parameterType="java.util.HashMap">
+	MERGE INTO USER2.AIR_INFO A
+	USING DUAL
+    ON (A.TMFC = #{tmFc})
+ 	WHEN MATCHED THEN
+ 	  UPDATE
+ 	  	 SET A.ICAO_CODE = #{icaoCode},
+ 	  	 	A.AIRPORT_NAME = #{airportName},
+	      	A.WD = #{wd},
+	      	A.WS = #{ws},
+	      	A.TA = #{ta},
+	      	A.QNH = #{qnh}
+	WHEN NOT MATCHED THEN
+      INSERT (
+      	A.ICAO_CODE, 
+      	A.AIRPORT_NAME,
+      	A.TMFC,
+      	A.WD,
+      	A.WS,
+      	A.TA,
+      	A.QNH
+      )
+      VALUES (
+      	#{icaoCode}, 
+      	#{airportName},
+      	#{tmFc},
+      	#{wd},
+      	#{ws},
+      	#{ta},
+      	#{qnh}
+      )
+  </insert>
+  
+  <insert id="insertDepartureData" parameterType="java.util.HashMap">
+	MERGE INTO USER2.USER_INFO A
+	USING DUAL
+    ON (A.EMAIL = #{email})
+ 	WHEN MATCHED THEN
+ 	  UPDATE
+ 	  	 SET A.UPDATE_DATE = SYSDATE,
+ 	  	 	A.DEPARTURE_DATE = #{departureDate}
+	WHEN NOT MATCHED THEN
+      INSERT (
+      	A.SEQ,
+      	A.EMAIL, 
+      	A.DEPARTURE_DATE,
+      	A.CREATE_DATE,
+      	A.UPDATE_DATE
+      )
+      VALUES (
+      	#{seq},
+      	#{email},
+      	#{departureDate},
+      	SYSDATE,
+      	SYSDATE
+      )
+  </insert>
+ 
+  <select id="departureDataSeq" resultType="java.util.HashMap">
+	SELECT MAX(SEQ) AS SEQ FROM USER2.USER_INFO
+  </select>
+  
+  <insert id="insertWeatherInfo" parameterType="java.util.HashMap">
+  	  INSERT INTO USER2.TAF_INFO(
+      	LINE0,
+      	LINE1,
+      	LINE2,
+      	LINE3,
+      	LINE4,
+      	CREATION_DATE
+      )
+      VALUES (
+      	#{resMap0},
+      	#{resMap1},
+      	#{resMap2},
+      	#{resMap3},
+      	#{resMap4},
+      	SYSDATE
+      )
+  </insert>
+  
+  <select id="selectWeatherInfo" resultType="java.util.HashMap">
+	SELECT *
+	FROM (
+		SELECT * 
+		FROM USER2.TAF_INFO 
+		ORDER BY CREATION_DATE DESC
+	) WHERE ROWNUM = 1
+  </select>
+  
+  <select id="selectUserInfo" resultType="java.util.HashMap">
+	SELECT * FROM USER2.USER_INFO
+  </select>
+ 
+ </mapper>

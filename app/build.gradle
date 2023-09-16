@@ -1,0 +1,80 @@
+plugins {
+  id 'org.springframework.boot' version '2.6.0'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
+  id 'eclipse'
+  id "io.freefair.lombok" version "6.4.1"
+}
+
+group = 'com.items'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  
+  implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+  
+  // REST Template
+  implementation 'org.apache.httpcomponents:httpclient:4.5.7'
+  
+  // json-simple
+  implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+  
+  // xmlToJson
+  //compile group: 'org.json', name: 'json', version: '20220320'
+  //gatlingImplementation 'org.json:json:20230227'
+  //compile group: 'org.json', name: 'json', version: '20180813'
+  //compile("org.json:json:20141113")
+  //Thanks for using https://jar-download.com
+  // https://mvnrepository.com/artifact/org.json/json
+  implementation group: 'org.json', name: 'json', version: '20230618'
+  
+  
+  // excel
+  // https://mvnrepository.com/artifact/org.apache.poi/poi
+  implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+  implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+  // https://mvnrepository.com/artifact/org.apache.tika/tika-core
+  implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
+
+  // mail
+  implementation 'org.springframework.boot:spring-boot-starter-mail'
+  
+  // 썸네일 이미지 생성 라이브러리
+  implementation 'net.coobird:thumbnailator:0.4.17'
+	
+  // Oracle JDBC 드라이버
+  implementation group: 'com.oracle.database.jdbc', name: 'ojdbc6', version: '11.2.0.4'
+  implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+  
+  // Mybatis 프레임 워크 (직접구성)
+  //implementation 'org.mybatis:mybatis:3.5.9'
+  //implementation 'org.mybatis:mybatis-spring:2.0.7'
+  
+  // Mybatis 프레임 워크 (스프링 스타터로 간접 구성)
+  //implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+  
+  // log4j2
+  implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'junit:junit:4.13.2'
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+test {
+  useJUnitPlatform()
+}

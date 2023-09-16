@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+  namespace => 인터페이스의 패키지 및 이름과 일치해야 한다.
+ -->
+<mapper namespace="com.items.dao.MailDao">
+
+  <resultMap type="Member" id="MemberMap">
+    <id column="no" property="no"/>
+    <result column="USER_ID" property="userID"/>
+    <result column="EMAIL" property="email"/>
+    <result column="PASSWORD" property="password"/>
+    <result column="REGISTDATE" property="registDate"/>
+  </resultMap>
+
+  <!-- 메일 보낼때 메일 인증 한번더함 -->
+  <select id="loginMailAuth" resultMap="MemberMap" parameterType="java.util.Map">
+	SELECT NO, USER_ID, EMAIL, PASSWORD, REGISTDATE 
+	FROM USER2.MEMBER WHERE EMAIL = #{email}
+  </select>
+  
+ </mapper>
