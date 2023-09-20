@@ -3,20 +3,20 @@
   <head>
   <meta charset="utf-8">
     <title>AviationWeatherService</title>
-    <style>
+    <style> 
       * { 
 		    margin: 0;
 		    padding: 0;
 		    box-sizing: border-box;
 		}	
-	     .jb-box { width: 1920px; height: 962.5px; overflow: hidden; margin: 0px auto; position: relative; }
-	     video { width: 100%; }
+	     .jb-box { width: 100%; height: 100%; overflow: hidden; margin: 0px 0px; position: relative; }
+	     video { width: 1920px; height: 1080px; position: sticky;}
 	     .jb-text { position: absolute; top: 50%; width: 100%; }
-	     .jb-text p { margin-top: -24px; text-align: center; font-size: 48px; color: #ffffff; }
-	     
-	     body::-webkit-scrollbar {
+	     .jb-text p { margin-top: -24px; text-align: center; font-size: 48px; color: rgb(255, 255, 128); }
+	    
+	    body { overflow: hidden; } 
+	    body::-webkit-scrollbar {
 	   	display: none; /* Chrome, Safari, Opera*/
-	   	
 	   	background:#2c2c2c;
 		font-family:"Raleway";
 	    }
@@ -25,9 +25,9 @@
 	  position:absolute;
 	  top:50%;
 	  left:50%;
-	  transform:translate(-50%,-50%);
+	  transform:translate(-50%,-90%);
 	  width:300px;
-	  height:250px;
+	  height:300px;
 	  padding:10px;
 	}
 	.form .form-header {
@@ -38,7 +38,7 @@
 	}
 	.form .form-header > div {
 	  width:500px;
-	  color:#ddd;
+	  color:rgb(255, 0, 128);
 	  font-size:11.5px;
 	  font-weight:600;
 	  cursor:pointer;

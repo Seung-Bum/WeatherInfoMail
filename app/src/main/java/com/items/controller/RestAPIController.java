@@ -3,6 +3,10 @@ package com.items.controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -541,25 +545,39 @@ public class RestAPIController {
 	
     /**
 	 * insertDepartureData
-	 * 사용자의 출국정보를 insert
+	 * 사용자가 입력한 출국정보를 insert
 	 * @param String email, String departureDate
 	 * @return 
+     * @throws ParseException 
 	 */
 	@RequestMapping("/departureData")
-	public String insertDepartureData(Model model, String email, String departureDate, 
-								HttpServletRequest request, HttpServletResponse response) {
-
+	public String insertDepartureData(String email, String departureDate, 
+								HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		
+		// date format ex) 20230920
 		log.info("- USER 입력정보 : email - " + email + " / departureDate - " + departureDate.replace("-",""));	
-		HashMap<String, Object> param = new HashMap<String, Object>();		
+		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("departureDate", departureDate.replace("-",""));
 		param.put("email", email);
 		
+        // 현재 날짜 구하기
+        LocalDate today = LocalDate.now();		
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         
+        Date dDay = formatter.parse(departureDate);
+        Date tDate = formatter.parse(today.toString());
+		
+		// 가장 최근의 seq의 다음 seq로 순서대로 적재
 		HashMap<String, Object> maxSeq = restAPIService.departureDataSeq();
 		param.put("seq",  Integer.valueOf(maxSeq.get("SEQ").toString()) + 1);
 		
-		// 오늘 날짜를 받아와서 과거이면 날짜를 안받음
-		
-		if (!param.get("email").equals("") && !param.get("departureDate").equals("")) {
+		if (!param.get("email").equals("") && !param.get("departureDate").equals("")) {			
+	        // before check
+	        if (dDay.before(tDate)) {
+	        	log.info("- 출국정보는 오늘 보다 미래여야 합니다.");
+	        	return "redirect:/aviationWeather.html";
+	        }			
+			
+			// 출국정보 insert
 			restAPIService.insertDepartureData(param);
 			log.info("- 출국정보 Upload 완료");
 			return "redirect:/aviationWeather.html";
@@ -568,6 +586,7 @@ public class RestAPIController {
 			// 출국정보 입력 안내 메시지 보내기
 			return "redirect:/aviationWeather.html";
 		}
+		
 	}
 	
 	
