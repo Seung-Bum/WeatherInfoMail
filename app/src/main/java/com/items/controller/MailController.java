@@ -202,9 +202,14 @@ public class MailController {
     } 
 
 	// 날씨정보 메일 스케줄
+	// 매일 당일 오전5시 날씨정보를 출국일 전까지 발송한다.
+	// 사용자의 출국일이 지나면 메일 발송 중지
 	@PostMapping("/weatherInfoMailSch")
 	@Scheduled(cron = "0 53 20 * * ?") // 초 분 시 일 월 요일
 	public void weatherInfoMailScheduled() throws Exception {
+		
+		// 메일발송 대상자 조회
+		// 
 		
 		// user 정보 가져와서 출국일이 지났을경우 메일발송 x
 		HashMap<String, Object> userInfo = restAPIService.selectUserInfo();

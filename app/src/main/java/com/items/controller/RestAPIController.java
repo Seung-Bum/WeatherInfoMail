@@ -568,12 +568,13 @@ public class RestAPIController {
 		
 		// 가장 최근의 seq의 다음 seq로 순서대로 적재
 		HashMap<String, Object> maxSeq = restAPIService.departureDataSeq();
-		param.put("seq",  Integer.valueOf(maxSeq.get("SEQ").toString()) + 1);
+		param.put("seq", Integer.valueOf(maxSeq.get("SEQ").toString()) + 1);
 		
-		if (!param.get("email").equals("") && !param.get("departureDate").equals("")) {			
-	        // before check
+		if (!param.get("email").equals("") && !param.get("departureDate").equals("")) {	
+	        
+			// before check
 	        if (dDay.before(tDate)) {
-	        	log.info("- 출국정보는 오늘 보다 미래여야 합니다.");
+	        	log.info("- 출국정보는 오늘 이상으로 설정해주세요.");
 	        	return "redirect:/aviationWeather.html";
 	        }			
 			
