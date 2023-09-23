@@ -78,7 +78,8 @@
   </insert>
  
   <select id="departureDataSeq" resultType="java.util.HashMap">
-	SELECT MAX(SEQ) AS SEQ FROM USER2.USER_INFO
+	SELECT MAX(SEQ) AS SEQ 
+	FROM USER2.USER_INFO
   </select>
   
   <insert id="insertWeatherInfo" parameterType="java.util.HashMap">
@@ -109,8 +110,10 @@
 	) WHERE ROWNUM = 1
   </select>
   
-  <select id="selectUserInfo" resultType="java.util.HashMap">
-	SELECT * FROM USER2.USER_INFO
+  <select id="targetUserInfo" resultType="java.util.HashMap">
+	SELECT * 
+	FROM USER2.USER_INFO 
+	WHERE TO_CHAR(SYSDATE, 'YYYYMMDD')<![CDATA[<]]>DEPARTURE_DATE
   </select>
  
  </mapper>

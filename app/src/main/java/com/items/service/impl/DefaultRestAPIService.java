@@ -1,6 +1,7 @@
 package com.items.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class DefaultRestAPIService implements RestAPIService {
 	}
 
 	@Override
-	public HashMap<String, Object> selectUserInfo() {
-		return restAPIDao.selectUserInfo();
+	public List<HashMap<String, Object>> targetUserInfo() {
+		return restAPIDao.targetUserInfo();
 	}
+	
 }

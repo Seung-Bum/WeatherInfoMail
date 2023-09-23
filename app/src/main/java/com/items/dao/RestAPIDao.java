@@ -1,6 +1,7 @@
 package com.items.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,5 +17,5 @@ public interface RestAPIDao {
 
 	HashMap<String, Object> selectWeatherInfo();
 	
-	HashMap<String, Object> selectUserInfo();
+	List<HashMap<String, Object>> targetUserInfo();
 }

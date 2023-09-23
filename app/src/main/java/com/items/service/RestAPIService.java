@@ -1,6 +1,7 @@
 package com.items.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface RestAPIService {
 	public void insertAirInfo(HashMap<String, Object> param);
@@ -13,5 +14,5 @@ public interface RestAPIService {
 	
 	public HashMap<String, Object> selectWeatherInfo();
 	
-	public HashMap<String, Object> selectUserInfo();
+	public List<HashMap<String, Object>> targetUserInfo();
 }
