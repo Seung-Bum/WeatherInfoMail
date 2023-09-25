@@ -1,0 +1,17 @@
+CREATE TABLE MEMBER
+(
+	NO NUMBER(4) NOT NULL,
+	name VARCHAR2(10),
+	email VARCHAR2(100),
+	password VARCHAR2(15),
+	registDate DATE
+);
+
+ALTER TABLE MEMBER ADD CONSTRAINT NO PRIMARY KEY (NO);
+
+--member
+INSERT INTO MEMBER (NO, AUTH, EMAIL, PASSWORD, REGISTDATE)
+VALUES(1, 'super', 'bum0047@naver.com', 'xxxxx', sysdate);
+
+COMMIT;
+

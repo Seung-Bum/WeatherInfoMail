@@ -10,7 +10,7 @@
 
   <resultMap type="Member" id="MemberMap">
     <id column="no" property="no"/>
-    <result column="USER_ID" property="userID"/>
+    <result column="AUTH" property="auth"/>
     <result column="EMAIL" property="email"/>
     <result column="PASSWORD" property="password"/>
     <result column="REGISTDATE" property="registDate"/>
@@ -18,7 +18,7 @@
 
   <!-- 메일 보낼때 메일 인증 한번더함 -->
   <select id="loginMailAuth" resultMap="MemberMap" parameterType="java.util.Map">
-	SELECT NO, USER_ID, EMAIL, PASSWORD, REGISTDATE 
+	SELECT NO, AUTH, EMAIL, PASSWORD, REGISTDATE 
 	FROM USER2.MEMBER WHERE EMAIL = #{email}
   </select>
   

@@ -45,13 +45,13 @@ public class MailController {
 	// 메일 발송
 	// PostMapping은 RequestBody로 전달
 	@PostMapping("/sendmail") 
-	public void sendPlainTextEmail(HttpSession sentSession, String email, String subject, String message) {
+	public void sendPlainTextEmail(String email, String subject, String message) {
     	
-		// 세션에서 로그인된 아이디를 가져온다
+		// 세션에서 로그인된 아이디를 가져온다 (파라미터로 받음)
     	//String user_id = (String) sentSession.getAttribute("user_id"); // 발신자 메일
 		
-		String user_id = "pkapka_@naver.com";
-    	log.info("수신자 메일 : " + email + ", 발신자 메일 : " + user_id);
+		String user_id = "bum1272@naver.com";
+    	log.info(" - 수신자 메일 : " + email + ", 발신자 메일 : " + user_id);
     	
         Properties p = System.getProperties();
         p.put("mail.smtp.starttls.enable", "true");     // gmail은 true 고정
@@ -78,19 +78,19 @@ public class MailController {
         }
                 
         Authenticator auth = new MyAuthentication(user_id);
-        log.info("auth 생성");
+        log.info("  - auth 생성");
         
         //session 생성 및  MimeMessage생성
         Session session = Session.getDefaultInstance(p, auth);
         MimeMessage msg = new MimeMessage(session);        
-        log.info("session 생성");
+        log.info("  - session 생성");
         
         try{
             //편지보낸시간
             msg.setSentDate(new Date());
             InternetAddress from = new InternetAddress();
             from = new InternetAddress(user_id); //발신자 아이디            
-            log.info("발신자 설정");
+            log.info("  - 발신자 설정");
             
             // 이메일 발신자
             msg.setFrom(from);
@@ -111,7 +111,7 @@ public class MailController {
             //메일보내기
             javax.mail.Transport.send(msg, msg.getAllRecipients());
             
-            log.info("mail 발송 완료");
+            log.info(" - mail 발송 완료");
             
         }catch (AddressException addr_e) {
             addr_e.printStackTrace();
@@ -121,32 +121,28 @@ public class MailController {
             msg_e.printStackTrace();
         }
     }
-	
+
 	// 날씨정보 메일 스케줄
 	// 매일 당일 오전5시 날씨정보를 출국일 전까지 발송한다.
 	// 사용자의 출국일이 지나면 메일 발송 중지
 	@GetMapping("/weatherInfoMailSch")
-	@Scheduled(cron = "0 53 20 * * ?") // 초 분 시 일 월 요일
-	public String weatherInfoMailScheduled() throws Exception {
+	@Scheduled(cron = "0 0 5 1/1 * ? *") // 초 분 시 일 월 요일
+	public void weatherInfoMailScheduled() throws Exception {
 		
 		// 메일발송 대상자 조회
-		//  - user 정보 가져와서 출국일이 지났을경우 메일발송 x
+		//  - user 정보 가져와서 출국일이 지났을 경우 메일발송 x
 		List<HashMap<String, Object>> targetUser = restAPIService.targetUserInfo();
 		
 		// 메일 내용으로 사용할 기상정보 발췌
 		HashMap<String, Object> weatherInfo = restAPIService.selectWeatherInfo();
 		 
-    	String subject = "weatherInfoMailSch";
+    	String subject = "WeatherInfo";
     	String message = (String) weatherInfo.get("LINE0") + weatherInfo.get("LINE1") + weatherInfo.get("LINE2") 
     							+ weatherInfo.get("LINE3") + weatherInfo.get("LINE4");
-    	
     	targetUser.forEach(user -> {
-    		log.info(user.toString());
-    		//targetUser.get("EMAIL");
+    		log.info(" - 발송대상 : " + user.get("EMAIL"));
+    		sendPlainTextEmail((String)user.get("EMAIL"), subject, message);
     	});
-    	
-    	//sendPlainTextEmail();
-    	return "hello";
     }
 
 }

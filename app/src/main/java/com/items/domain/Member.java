@@ -1,11 +1,9 @@
 package com.items.domain;
 
-import java.sql.Date;
-
 public class Member {
 	private int no;
-	private String userID; // 회원 가입시 중복되는 아이디 체크해서 가입안되게 해야함
-	private String email;  // 이메일도 마찬가지로 중복체크 필요
+	private String auth; 
+	private String email;
 	private String password;
 	private java.sql.Date registDate;
 	  
@@ -15,11 +13,11 @@ public class Member {
 	public void setNo(int no) {
 		this.no = no;
 	}
-	public String getUserID() {
-		return userID;
+	public String getAuth() {
+		return auth;
 	}
-	public void setUserID(String name) {
-		this.userID = name;
+	public void setAuth(String name) {
+		this.auth = name;
 	}
 	public String getEmail() {
 		return email;

@@ -1,8 +1,5 @@
 package com.items.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,8 +8,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -21,31 +16,17 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
+import com.items.Util.EmailValidator;
 import com.items.domain.Airport;
 import com.items.service.RestAPIService;
 
@@ -111,7 +92,6 @@ public class RestAPIController {
 		String[] line2;
 		String[] line3;
 		String[] line4;
-		String[] line5;
 
 		// TAF Line Loop
 		log.info("TAF Line Loop Start");
@@ -219,7 +199,6 @@ public class RestAPIController {
 		return resXml;
 	}
 	
-	
 	/**
 	 * isNumeric
 	 * 숫자만 있는지 확인
@@ -246,6 +225,13 @@ public class RestAPIController {
 	@RequestMapping("/departureData")
 	public String insertDepartureData(String email, String departureDate, 
 								HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		
+		// email 형태 확인하기 (html input에서 걸러주긴함)
+		EmailValidator emailValidator = new EmailValidator(); 
+		if (!emailValidator.isValidEmail(email)) {
+			log.info("- email 형식이 아닙니다. ");
+			return "redirect:/aviationWeather.html";
+		}
 		
 		// date format ex) 20230920
 		log.info("- USER 입력정보 : email - " + email + " / departureDate - " + departureDate.replace("-",""));	
@@ -394,7 +380,5 @@ public class RestAPIController {
     	
     	return resultStr;
     }
-
-
 
 }
