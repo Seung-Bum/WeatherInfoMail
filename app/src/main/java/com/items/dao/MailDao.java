@@ -1,7 +1,5 @@
 package com.items.dao;
 
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.items.domain.Member;

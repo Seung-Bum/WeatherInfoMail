@@ -126,8 +126,8 @@ public class MailController {
 	// 매일 당일 오전5시 날씨정보를 출국일 전까지 발송한다.
 	// 사용자의 출국일이 지나면 메일 발송 중지
 	@GetMapping("/weatherInfoMailSch")
-	@Scheduled(cron = "0 0 5 1/1 * ? *") // 초 분 시 일 월 요일
-	public void weatherInfoMailScheduled() throws Exception {
+	//@Scheduled(cron = "0 0 5 1/1 * ? *") // 초 분 시 일 월 요일
+	public String weatherInfoMailScheduled() throws Exception {
 		
 		// 메일발송 대상자 조회
 		//  - user 정보 가져와서 출국일이 지났을 경우 메일발송 x
@@ -143,6 +143,8 @@ public class MailController {
     		log.info(" - 발송대상 : " + user.get("EMAIL"));
     		sendPlainTextEmail((String)user.get("EMAIL"), subject, message);
     	});
+    	
+    	return "redirect:/aviationWeather.html";
     }
 
 }
