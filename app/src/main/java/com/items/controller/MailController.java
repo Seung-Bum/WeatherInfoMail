@@ -42,8 +42,12 @@ public class MailController {
 	@Autowired
 	RestAPIService restAPIService;
 
-	// 메일 발송
-	// PostMapping은 RequestBody로 전달
+	/**
+	 * 메일 발송
+	 *  - PostMapping은 RequestBody로 전달
+	 * @param  String email, String subject, String message
+	 * @return void
+	 */
 	@PostMapping("/sendmail") 
 	public void sendPlainTextEmail(String email, String subject, String message) {
     	
@@ -51,6 +55,7 @@ public class MailController {
     	//String user_id = (String) sentSession.getAttribute("user_id"); // 발신자 메일
 		
 		String user_id = "bum1272@naver.com";
+		log.info("* mail 발송 시작");
     	log.info(" - 수신자 메일 : " + email + ", 발신자 메일 : " + user_id);
     	
         Properties p = System.getProperties();
@@ -58,7 +63,7 @@ public class MailController {
         p.put("mail.smtp.host", "smtp.naver.com");      // smtp 서버 주소
         p.put("mail.smtp.auth","true");                 // gmail은 true 고정
         p.put("mail.smtp.port", "587");                 // 네이버 포트
-        log.info("smtp 설정");
+        log.info(" - smtp 설정");
         
         class MyAuthentication extends Authenticator {            
             PasswordAuthentication pa;
@@ -90,7 +95,7 @@ public class MailController {
             msg.setSentDate(new Date());
             InternetAddress from = new InternetAddress();
             from = new InternetAddress(user_id); //발신자 아이디            
-            log.info("  - 발신자 설정");
+            log.info(" - 발신자 설정");
             
             // 이메일 발신자
             msg.setFrom(from);
@@ -122,29 +127,36 @@ public class MailController {
         }
     }
 
-	// 날씨정보 메일 스케줄
-	// 매일 당일 오전5시 날씨정보를 출국일 전까지 발송한다.
-	// 사용자의 출국일이 지나면 메일 발송 중지
+	/**
+	 * 날씨정보 메일 스케줄
+	 *  - 매일 당일 오전6시 날씨정보를 출국일 전까지 발송한다. (사용자의 출국일이 지나면 메일 발송 중지)
+	 * @return String @ author yang @ version 1.0
+	 */
 	@GetMapping("/weatherInfoMailSch")
-	//@Scheduled(cron = "0 0 5 1/1 * ? *") // 초 분 시 일 월 요일
+	@Scheduled(cron = "0 0 6 * * ?") // 초 분 시 일 월 요일
 	public String weatherInfoMailScheduled() throws Exception {
 		
-		// 메일발송 대상자 조회
-		//  - user 정보 가져와서 출국일이 지났을 경우 메일발송 x
-		List<HashMap<String, Object>> targetUser = restAPIService.targetUserInfo();
-		
-		// 메일 내용으로 사용할 기상정보 발췌
-		HashMap<String, Object> weatherInfo = restAPIService.selectWeatherInfo();
-		 
-    	String subject = "WeatherInfo";
-    	String message = (String) weatherInfo.get("LINE0") + weatherInfo.get("LINE1") + weatherInfo.get("LINE2") 
-    							+ weatherInfo.get("LINE3") + weatherInfo.get("LINE4");
-    	targetUser.forEach(user -> {
-    		log.info(" - 발송대상 : " + user.get("EMAIL"));
-    		sendPlainTextEmail((String)user.get("EMAIL"), subject, message);
-    	});
-    	
-    	return "redirect:/aviationWeather.html";
+		try {
+			// 메일발송 대상자 조회
+			//  - user 정보 가져와서 출국일이 지났을 경우 메일발송 x
+			List<HashMap<String, Object>> targetUser = restAPIService.targetUserInfo();
+			
+			// 메일 내용으로 사용할 기상정보 발췌
+			HashMap<String, Object> weatherInfo = restAPIService.selectWeatherInfo();
+			 
+	    	String subject = "WeatherInfo";
+	    	String message = (String) weatherInfo.get("LINE0") + weatherInfo.get("LINE1") + 
+	    							weatherInfo.get("LINE2") + weatherInfo.get("LINE3") + weatherInfo.get("LINE4");
+	    	
+	    	targetUser.forEach(user -> {
+	    		sendPlainTextEmail((String)user.get("EMAIL"), subject, message);
+	    	});
+	    	
+	    	return "success";
+		} catch(Exception e) {
+			log.error("weatherInfoMailSch: " + e.getMessage());
+			return "fail";
+		}
     }
 
 }
