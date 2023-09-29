@@ -47,6 +47,7 @@ public class RestAPIController {
 	Airport airport;
 	
 	/**
+	 * aviationWeatherAPI
 	 * 항공기상정보 DB적재(Aviation weather information restAPI, XMLtoJson)
 	 * @param model
 	 * @return String @ author yang @ version 1.0

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,12 +28,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.items.Util.Base64Config;
 import com.items.service.MailService;
 import com.items.service.RestAPIService;
 
 @Controller
 @RequestMapping("/mail")
 public class MailController {
+	
+	@Value("${userEmail}")
+	private String userEmail;
 	
 	private static final Logger log = LogManager.getLogger(MailController.class);
 	
@@ -54,14 +59,17 @@ public class MailController {
 		// 세션에서 로그인된 아이디를 가져온다 (파라미터로 받음)
     	//String user_id = (String) sentSession.getAttribute("user_id"); // 발신자 메일
 		
-		String user_id = "bum1272@naver.com";
+		// encoding된 mail을 decoding하여 가져옴
+		String user_id = Base64Config.base64Decoding(userEmail.getBytes());
+		log.info(" - 관리자 메일 decoding 완료");
+		
 		log.info("* mail 발송 시작");
     	log.info(" - 수신자 메일 : " + email + ", 발신자 메일 : " + user_id);
     	
         Properties p = System.getProperties();
         p.put("mail.smtp.starttls.enable", "true");     // gmail은 true 고정
         p.put("mail.smtp.host", "smtp.naver.com");      // smtp 서버 주소
-        p.put("mail.smtp.auth","true");                 // gmail은 true 고정
+        p.put("mail.smtp.auth", "true");                // gmail은 true 고정
         p.put("mail.smtp.port", "587");                 // 네이버 포트
         log.info(" - smtp 설정");
         
@@ -69,8 +77,11 @@ public class MailController {
             PasswordAuthentication pa;
             
             public MyAuthentication(String idPram){
+            	String encodingPassword = mailService.loginMailAuth(idPram).getPassword();
+            	
                 String id = idPram;  //네이버 이메일 아이디
-                String pw = mailService.loginMailAuth(idPram).getPassword();  //네이버 비밀번호
+                String pw = Base64Config.base64Decoding(encodingPassword.getBytes());  //네이버 비밀번호
+                log.info("  -  password decoding 완료");
          
                 // ID와 비밀번호를 입력한다.
                 pa = new PasswordAuthentication(id, pw);
@@ -143,7 +154,6 @@ public class MailController {
 			
 			// 메일 내용으로 사용할 기상정보 발췌
 			HashMap<String, Object> weatherInfo = restAPIService.selectWeatherInfo();
-			 
 	    	String subject = "WeatherInfo";
 	    	String message = (String) weatherInfo.get("LINE0") + weatherInfo.get("LINE1") + 
 	    							weatherInfo.get("LINE2") + weatherInfo.get("LINE3") + weatherInfo.get("LINE4");
