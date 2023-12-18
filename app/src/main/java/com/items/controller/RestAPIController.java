@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.items.Util.EmailValidator;
@@ -369,5 +372,22 @@ public class RestAPIController {
     	
     	return resultStr;
     }
+    
+    @PostMapping(value = "/test", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
+    @ResponseBody
+    public String handlePostRequest(@RequestParam Map<String, String> requestData) {
+    	
+    	System.out.println(requestData);
+    	
+        // Access values using keys
+        String input1 = requestData.get("input1");
+        String input2 = requestData.get("input2");
 
+        // Do something with the values (e.g., print them)
+        System.out.println("Input 1: " + input1);
+        System.out.println("Input 2: " + input2);
+
+        // Return a response
+        return "Received POST request with Input 1: " + input1 + ", Input 2: " + input2;
+    }
 }
