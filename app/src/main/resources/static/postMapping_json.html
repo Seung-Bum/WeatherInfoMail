@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Form</title>
+</head>
+<body>
+    <form id="jsonForm">
+        <label for="input1">Input 1:</label>
+        <input type="text" id="input1" name="input1" required>
+        <br>
+
+        <label for="input2">Input 2:</label>
+        <input type="text" id="input2" name="input2" required>
+        <br>
+
+        <label for="input3">Input 3:</label>
+        <input type="text" id="input3" name="input3" required>
+        <br>
+
+        <button type="button" onclick="sendJson()">Submit</button>
+    </form>
+
+    <script>
+        function sendJson() {
+            // Form에서 값 가져오기
+            var input1Value = document.getElementById('input1').value;
+            var input2Value = document.getElementById('input2').value;
+            var input3Value = document.getElementById('input3').value;
+
+            // JSON 데이터 만들기
+            var jsonData = {
+                input1: input1Value,
+                input2: input2Value,
+                input3: input3Value
+            };
+
+            // Fetch API를 사용하여 JSON을 POST
+            fetch('http://localhost:8081/postJson', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
